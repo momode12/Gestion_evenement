@@ -17,10 +17,11 @@ function Dashboard() {
   const [nombreUtilisateurs, setNombreUtilisateurs] = useState(0);
   const [nombreEntreesSorties, setNombreEntreesSorties] = useState(0);
   const [dataHistogramme, setDataHistogramme] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
  useEffect(() => {
   axios
-    .get("http://localhost:5000/api/entree_sortie/number")
+    .get(`${API_URL}/api/entree_sortie/number`)
     .then((res) => {
       setNombreClients(res.data.nombre_clients);
       setNombreUtilisateurs(res.data.nombre_utilisateurs);

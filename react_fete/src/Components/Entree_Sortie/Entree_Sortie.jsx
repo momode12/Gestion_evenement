@@ -25,7 +25,7 @@ function Entree_Sortie() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const role = localStorage.getItem("role_utilisateur");
     setIsAdmin(role === "admin");
@@ -33,7 +33,7 @@ function Entree_Sortie() {
 
   const fetchData = () => {
     axios
-      .get("http://localhost:5000/api/entree_sortie/fetch")
+      .get(`${API_URL}/api/entree_sortie/fetch`)
       .then((response) => {
         setEntreesSorties(response.data);
         setFilteredData(response.data);
@@ -73,7 +73,7 @@ function Entree_Sortie() {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/api/entree_sortie/delete/${id}`);
+        await axios.delete(`${API_URL}/api/entree_sortie/delete/${id}`);
 
 
         Swal.fire("Supprimé !", "L'entrée a été supprimée.", "success");

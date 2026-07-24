@@ -26,7 +26,7 @@ function User() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
- 
+  const API_URL = import.meta.env.VITE_API_URL;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(4);
 
@@ -71,7 +71,7 @@ function User() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/utilisateur");
+      const response = await axios.get(`${API_URL}/api/utilisateur`);
       console.log("Données récupérées :", response.data);
       // Vérifiez si response.data est un tableau directement
       setData(Array.isArray(response.data) ? response.data : response.data.rows || []);

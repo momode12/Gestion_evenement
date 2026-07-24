@@ -31,6 +31,7 @@ function Register() {
   const [capsLockActive, setCapsLockActive] = useState(false);
   const [role, setRole] = useState("");
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const handleKeyUp = (e) => {
@@ -112,7 +113,7 @@ function Register() {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/utilisateur/", {
+      const response = await fetch(`${API_URL}/api/utilisateur/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
