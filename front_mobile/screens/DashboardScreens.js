@@ -12,6 +12,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import Icon from "react-native-vector-icons/Feather";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { API_URL } from "@env";
 
 const extractCIN = (rawData) => {
   const regex = /CIN:\s*(.+)/i; // Regexp pour détecter "CIN:" + espace(s) + valeur
@@ -41,7 +42,7 @@ export default function DashboardScreen() {
       const cinClient = extractCIN(data);
 
       const etatResponse = await fetch(
-        `http://192.168.1.104:5000/api/entree_sortie/etat`
+        `${API_URL}/api/entree_sortie/etat`
       );
       const etatData = await etatResponse.json();
       const etatFete = etatData.etat; // 'entree', 'sortie' ou null
@@ -67,7 +68,7 @@ export default function DashboardScreen() {
       }
 
       const response = await fetch(
-        `http://192.168.1.104:5000/api/entree_sortie/${action}`,
+        `${API_URL}/api/entree_sortie/${action}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

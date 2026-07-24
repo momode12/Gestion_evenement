@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "@env";
 
 const { width } = Dimensions.get("window");
 
@@ -47,7 +48,7 @@ export default function LoginScreens() {
 
   try {
     const response = await axios.post(
-      `http://192.168.1.104:5000/api/utilisateur/login`,
+      `${API_URL}/api/utilisateur/login`,
       loginData,
       {
         headers: { "Content-Type": "application/json" },
