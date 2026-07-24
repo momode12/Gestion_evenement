@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from 'axios';
+import { API_URL } from "@env";
 
 export default function RegisterScreens() {
   const [showPassword, setShowPassword] = useState(false);
@@ -73,7 +74,7 @@ export default function RegisterScreens() {
   };
 
   try {
-    const response = await axios.post(`http://192.168.1.104:5000/api/utilisateur`, registrationData);
+    const response = await axios.post(`${API_URL}/api/utilisateur`, registrationData);
 
     if (response.status === 200 || response.status === 201) {
       Alert.alert("✅ Succès", "Inscription réussie !");
