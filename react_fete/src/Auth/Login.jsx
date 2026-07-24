@@ -15,12 +15,14 @@ import WarningIcon from "@mui/icons-material/Warning";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [capsLockActive, setCapsLockActive] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const handleShowPassword = () => {
@@ -64,7 +66,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/utilisateur/login",
+        `${API_URL}/api/utilisateur/login`,
         loginData,
         {
           headers: {

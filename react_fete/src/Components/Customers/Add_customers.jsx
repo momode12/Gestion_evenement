@@ -30,6 +30,7 @@ function AddCustomers({ open, handleClose, onSuccess }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 const [fileObject, setFileObject] = useState(null);
+const API_URL = import.meta.env.VITE_API_URL;
 
 const handleFileChange = (e) => {
   const file = e.target.files[0];
@@ -70,7 +71,7 @@ const handleSubmit = async () => {
     form.append("id_utilisateur", id_utilisateur); // à adapter
     form.append("photo_client", fileObject);
 
-    const response = await fetch("http://localhost:5000/api/client/create", {
+    const response = await fetch(`${API_URL}/api/client/create`, {
       method: "POST",
       body: form,
     });

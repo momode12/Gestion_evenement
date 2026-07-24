@@ -32,6 +32,7 @@ function Customers() {
   const [selectedClient, setSelectedClient] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Fetch clients from the backend
   useEffect(() => {
@@ -39,7 +40,7 @@ function Customers() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("http://localhost:5000/api/client/fetch");
+        const response = await fetch(`${API_URL}/api/client/fetch`);
         if (!response.ok) {
           throw new Error("Failed to fetch clients");
         }
@@ -110,7 +111,7 @@ function Customers() {
     if (result.isConfirmed) {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/client/delete/${id_client}`,
+          `${API_URL}/api/client/delete/${id_client}`,
           {
             method: "DELETE",
           }
@@ -145,7 +146,7 @@ function Customers() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("http://localhost:5000/api/client/fetch");
+        const response = await fetch(`${API_URL}/api/client/fetch`);
         if (!response.ok) {
           throw new Error("Échec de la récupération des clients");
         }

@@ -38,6 +38,7 @@ function Update_user({ openModify, handleCloseModify, selectedUser, onSuccess })
 
   // État pour les erreurs de validation
   const [errors, setErrors] = useState({});
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Initialiser les champs du formulaire lorsque selectedUser change
   useEffect(() => {
@@ -107,7 +108,7 @@ function Update_user({ openModify, handleCloseModify, selectedUser, onSuccess })
       const payload = { statut };
       console.log('Sending payload:', payload);
       const response = await axios.put(
-        `http://localhost:5000/api/utilisateur/validation/${formData.id}`,
+        `${API_URL}/api/utilisateur/validation/${formData.id}`,
         payload
       );
       console.log('API response:', response.data); // Debug: Log API response

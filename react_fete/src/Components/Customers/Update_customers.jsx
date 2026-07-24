@@ -26,7 +26,7 @@ function Update_customers({ open, handleClose, onSuccess, clientData }) {
   });
 
   const [fileObject, setFileObject] = useState(null);
-
+  const API_URL = import.meta.env.VITE_API_URL;
   // Populate form with client data when dialog opens
   useEffect(() => {
     if (open && clientData) {
@@ -120,7 +120,7 @@ function Update_customers({ open, handleClose, onSuccess, clientData }) {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/client/update/${clientData?.id_client}`,
+        `${API_URL}/api/client/update/${clientData?.id_client}`,
         {
           method: "PUT",
           body: form,

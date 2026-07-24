@@ -64,6 +64,7 @@ function List_client() {
   const [selectedClients, setSelectedClients] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const role = localStorage.getItem('role');
@@ -72,7 +73,7 @@ function List_client() {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/client/list', {
+      const response = await axios.get(`${API_URL}/api/client/list`, {
         params: { start: startDate, end: endDate },
       });
       setClients(response.data);
@@ -105,7 +106,7 @@ function List_client() {
   const handleDelete = async () => {
     if (selectedClients.length === 0) return;
     try {
-      await axios.post('http://localhost:5000/api/client/delete-multiple', { cins: selectedClients });
+      await axios.post(`${API_URL}/api/client/delete-multiple`, { cins: selectedClients });
       fetchClients();
     } catch {
       console.error('Erreur lors de la suppression');
