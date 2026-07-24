@@ -1,33 +1,44 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from flask import Flask
+from flask_cors import CORS
 from config import Config
 from models._init_ import db
 from routes.__init__ import create_routes
 from extensions import mail
 
-from flask_cors import CORS
-
 app = Flask(__name__)
-CORS(app, supports_credentials=True, origins=["http://localhost:5173"],
-     allow_headers=["Content-Type"],
-     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
-
-# Charger la config principale
 app.config.from_object(Config)
 
-# Initialiser extensions
+# Lire les domaines autorisés
+origins = os.getenv("FRONTEND_URL", "").split(",")
+
+CORS(
+    app,
+    resources={r"/api/*": {"origins": origins}},
+    supports_credentials=True,
+    allow_headers=["Content-Type", "Authorization"],
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+)
+
+# Initialisation
 db.init_app(app)
 mail.init_app(app)
 
-# Créer toutes les tables
 with app.app_context():
     db.create_all()
 
-# Enregistrer les blueprints (routes)
 create_routes(app)
 
-@app.route('/')
+@app.route("/")
 def index():
-    return 'Welcome to the Flask Application!'
+    return {
+        "status": "OK",
+        "message": "API Flask opérationnelle"
+    }
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
