@@ -1,4 +1,6 @@
-from ._init_ import db
+# models/utilisateur_model.py
+from . import db
+
 
 class Utilisateur(db.Model):
     id_utilisateur = db.Column(db.Integer, primary_key=True)  # Auto-incrémenté automatiquement

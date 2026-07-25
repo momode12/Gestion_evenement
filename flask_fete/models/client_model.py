@@ -1,5 +1,7 @@
-from ._init_ import db
+# models/client_model.py
 from datetime import datetime
+from . import db
+
 
 class Client(db.Model):
     cin_client = db.Column(db.String, primary_key=True)

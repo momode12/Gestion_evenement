@@ -3,7 +3,7 @@ from extensions import mail
 
 def envoyer_email_admin(utilisateur):
     msg = Message('Nouvelle demande d\'inscription',
-                  recipients=['heritianajulien45@gmail.com'])
+                  recipients=['heritianajulien12@gmail.com'])
     msg.body = f"""
 Un nouvel utilisateur a demandé une inscription.
 

@@ -1,6 +1,7 @@
-from .utilisateurs._init_ import utilisateur_bp
-from .client.___init___ import client_bp
-from .entree_sortie.____init____ import entree_sortie_bp
+from routes.utilisateurs import utilisateur_bp
+from routes.client import client_bp
+from routes.entree_sortie import entree_sortie_bp
+
 
 def create_routes(app):
     app.register_blueprint(utilisateur_bp)

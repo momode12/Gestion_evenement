@@ -1,20 +1,20 @@
 from flask import jsonify
-from models.entree_sortie_model import EntreeSortie
+from services.entree_sortie_service import obtenir_dernier_etat
+
 
 def get_etat():
     try:
-        dernier_entree_sortie = EntreeSortie.query.order_by(EntreeSortie.id_entree_sortie.desc()).first()
+        dernier = obtenir_dernier_etat()
 
-        if dernier_entree_sortie:
+        if dernier:
             result = {
-                "id_entree_sortie": dernier_entree_sortie.id_entree_sortie,
-                "cin_client": dernier_entree_sortie.cin_client,
-                "etat": dernier_entree_sortie.etat,
-                "date_heure": dernier_entree_sortie.date_heure.isoformat() if dernier_entree_sortie.date_heure else None
+                "id_entree_sortie": dernier.id_entree_sortie,
+                "cin_client": dernier.cin_client,
+                "etat": dernier.etat,
+                "date_heure": dernier.date_heure.isoformat() if dernier.date_heure else None
             }
             return jsonify(result), 200
         else:
-            # Aucun enregistrement, mais on renvoie un message 200 (OK)
             return jsonify({"message": "Aucun enregistrement trouvé"}), 200
 
     except Exception as e:

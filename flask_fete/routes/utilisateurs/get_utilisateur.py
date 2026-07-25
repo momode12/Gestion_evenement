@@ -1,8 +1,9 @@
 from flask import jsonify
-from models.utilisateur_model import Utilisateur
+from services.utilisateur_service import lister_utilisateurs
+
 
 def get_utilisateurs():
-    utilisateurs = Utilisateur.query.all()
+    utilisateurs = lister_utilisateurs()
     return jsonify([
         {
             'id': u.id_utilisateur,
