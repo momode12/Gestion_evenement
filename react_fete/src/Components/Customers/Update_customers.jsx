@@ -94,6 +94,7 @@ function Update_customers({ open, handleClose, onSuccess, clientData }) {
       });
       return;
     }
+    
 
     const id_utilisateur = localStorage.getItem("utilisateur_id");
     if (!id_utilisateur) {
@@ -231,6 +232,7 @@ function Update_customers({ open, handleClose, onSuccess, clientData }) {
           name="email_client"
           label="Email"
           fullWidth
+          disabled
           value={formData.email_client}
           onChange={handleChange}
         />

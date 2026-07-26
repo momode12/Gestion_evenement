@@ -1,27 +1,48 @@
+# email_service.py
 import os
 import base64
-import resend
+import requests
 
-resend.api_key = os.getenv("RESEND_API_KEY")
-FROM_EMAIL = os.getenv("RESEND_FROM_EMAIL", "onboarding@resend.dev")
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER")
+
+BREVO_API_URL = "https://api.brevo.com/v3/smtp/email"
 
 
 def _envoyer(destinataire, sujet, corps, qr_code_bytes=None):
-    params = {
-        "from": FROM_EMAIL,
-        "to": [destinataire],
+    headers = {
+        "accept": "application/json",
+        "api-key": BREVO_API_KEY,
+        "content-type": "application/json",
+    }
+
+    payload = {
+        "sender": {"email": MAIL_DEFAULT_SENDER},
+        "to": [{"email": destinataire}],
         "subject": sujet,
-        "text": corps,
+        "textContent": corps,
     }
 
     if qr_code_bytes:
-        params["attachments"] = [{
-            "filename": "code_qr.png",
+        payload["attachment"] = [{
+            "name": "code_qr.png",
             "content": base64.b64encode(qr_code_bytes).decode("utf-8"),
         }]
 
-    resend.Emails.send(params)
+    print(f"[BREVO] Clé API présente : {bool(BREVO_API_KEY)}")
+    print(f"[BREVO] Sender utilisé : {MAIL_DEFAULT_SENDER}")
+    print(f"[BREVO] Envoi vers {destinataire}...")
 
+    response = requests.post(BREVO_API_URL, json=payload, headers=headers)
+
+    print(f"[BREVO] Status: {response.status_code}")
+    print(f"[BREVO] Réponse: {response.text}")
+
+    if response.status_code >= 400:
+        print(f"Erreur lors de l'envoi de l'email via Brevo : {response.status_code} - {response.text}")
+        response.raise_for_status()
+
+    return response.json()
 
 def envoyer_email_client_creation(email, qr_code_bytes):
     corps = (
@@ -54,11 +75,11 @@ Rôle : {utilisateur.role_utilisateur}
 
 Merci de valider ou refuser cette inscription via l'interface d'administration.
 """
-    _envoyer("heritianajulien45@gmail.com", "Nouvelle demande d'inscription", corps)
+    _envoyer("heritianajulien12@gmail.com", "Nouvelle demande d'inscription", corps)
 
 
 def envoyer_email_utilisateur(utilisateur, statut):
-    if statut == 'accepté':
+    if statut == 'Accepté':
         corps = f"""
 Bonjour {utilisateur.prenom_utilisateur},
 

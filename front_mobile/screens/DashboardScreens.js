@@ -9,15 +9,15 @@ import {
   Pressable,
 } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import Icon from "react-native-vector-icons/Feather";
+import { Feather as Icon } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { API_URL } from "@env";
 
 const extractCIN = (rawData) => {
-  const regex = /CIN:\s*(.+)/i; // Regexp pour détecter "CIN:" + espace(s) + valeur
+  const regex = /CIN:\s*(.+)/i;
   const match = rawData.match(regex);
-  return match ? match[1].trim() : rawData.trim(); // Retourne CIN ou tout le texte si non trouvé
+  return match ? match[1].trim() : rawData.trim();
 };
 
 export default function DashboardScreen() {
@@ -26,79 +26,74 @@ export default function DashboardScreen() {
   const [scanned, setScanned] = useState(false);
   const [zoom, setZoom] = useState(0);
   const [flash, setFlash] = useState("off");
+  const [torch, setTorch] = useState(false);
   const [hasFlash, setHasFlash] = useState(true);
   const [storedData, setStoredData] = useState({ role_utilisateur: null });
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   const handleBarCodeScanned = useCallback(
-  async ({ type, data }) => {
-    if (scanned) return;
-    setScanned(true);
+    async ({ type, data }) => {
+      if (scanned) return;
+      setScanned(true);
 
-    try {
-      const utilisateur_id = await AsyncStorage.getItem("utilisateur_id");
-      const role_utilisateur = storedData.role_utilisateur;
+      try {
+        const utilisateur_id = await AsyncStorage.getItem("utilisateur_id");
+        const role_utilisateur = storedData.role_utilisateur;
 
-      const cinClient = extractCIN(data);
+        const cinClient = extractCIN(data);
 
-      const etatResponse = await fetch(
-        `${API_URL}/api/entree_sortie/etat`
-      );
-      const etatData = await etatResponse.json();
-      const etatFete = etatData.etat; // 'entree', 'sortie' ou null
+        const etatResponse = await fetch(`${API_URL}/api/entree_sortie/etat`);
+        const etatData = await etatResponse.json();
+        const etatFete = etatData.etat;
 
-      console.log("QR brut :", data);
-      console.log("CIN extrait :", cinClient);
-      console.log("État actuel :", etatFete);
-      console.log("Rôle :", role_utilisateur);
+        console.log("QR brut :", data);
+        console.log("CIN extrait :", cinClient);
+        console.log("État actuel :", etatFete);
+        console.log("Rôle :", role_utilisateur);
 
-      let action = null;
+        let action = null;
 
-      if (etatFete === "sortie" && role_utilisateur === "securite_entree") {
-        action = "entree";
-      } else if (etatFete === "entree" && role_utilisateur === "securite_sortie") {
-        action = "sortie";
-      } else {
-        Alert.alert(
-          "⛔ Accès refusé",
-          "Action non autorisée selon l’état actuel ou votre rôle."
-        );
-        setScanned(false);
-        return;
-      }
+        if (etatFete === "sortie" && role_utilisateur === "securite_entree") {
+          action = "entree";
+        } else if (etatFete === "entree" && role_utilisateur === "securite_sortie") {
+          action = "sortie";
+        } else {
+          Alert.alert(
+            "⛔ Accès refusé",
+            "Action non autorisée selon l'état actuel ou votre rôle."
+          );
+          setScanned(false);
+          return;
+        }
 
-      const response = await fetch(
-        `${API_URL}/api/entree_sortie/${action}`,
-        {
+        const response = await fetch(`${API_URL}/api/entree_sortie/${action}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             cin_client: cinClient,
             id_utilisateur: utilisateur_id,
           }),
-        }
-      );
+        });
 
-      const result = await response.json();
+        const result = await response.json();
 
-      Alert.alert(
-        response.ok
-          ? action === "entree"
-            ? "🚪 Entrée réussie"
-            : "🔓 Sortie réussie"
-          : "❌ Erreur",
-        result.message || `Action ${action} effectuée.`,
-        [{ text: "OK", onPress: () => setScanned(false) }]
-      );
-    } catch (error) {
-      console.error("Erreur API:", error);
-      Alert.alert("❌ Erreur", "Une erreur s’est produite.");
-      setScanned(false);
-    }
-  },
-  [scanned, storedData]
-);
-
+        Alert.alert(
+          response.ok
+            ? action === "entree"
+              ? "🚪 Entrée réussie"
+              : "🔓 Sortie réussie"
+            : "❌ Erreur",
+          result.message || `Action ${action} effectuée.`,
+          [{ text: "OK", onPress: () => setScanned(false) }]
+        );
+      } catch (error) {
+        console.error("Erreur API:", error);
+        Alert.alert("❌ Erreur", "Une erreur s'est produite.");
+        setScanned(false);
+      }
+    },
+    [scanned, storedData]
+  );
 
   useEffect(() => {
     const loadStoredData = async () => {
@@ -151,7 +146,7 @@ export default function DashboardScreen() {
 
   const toggleFlash = useCallback(() => {
     if (hasFlash) {
-      setFlash((prev) => (prev === "torch" ? "off" : "torch"));
+      setTorch((prev) => !prev);
     } else {
       Alert.alert("Erreur", "Le flash n'est pas disponible sur cet appareil.");
     }
@@ -185,12 +180,7 @@ export default function DashboardScreen() {
               <ActivityIndicator size="small" color="#007AFF" />
             ) : (
               <View style={styles.dataRow}>
-                <Icon
-                  name="user"
-                  size={20}
-                  color="#555"
-                  style={styles.dataIcon}
-                />
+                <Icon name="user" size={20} color="#555" style={styles.dataIcon} />
                 <Text style={styles.dataText}>
                   Rôle : {storedData.role_utilisateur}
                 </Text>
@@ -200,11 +190,13 @@ export default function DashboardScreen() {
 
           <View style={styles.cameraContainer}>
             <CameraView
-              onBarcodeScanned={handleBarCodeScanned}
-              barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
+              style={styles.camera}
+              facing="back"
               zoom={zoom}
               flash={flash}
-              style={StyleSheet.absoluteFillObject}
+              enableTorch={torch}
+              onBarcodeScanned={handleBarCodeScanned}
+              barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
             />
             {scanned && <View style={styles.scanOverlay} />}
           </View>
@@ -225,14 +217,14 @@ export default function DashboardScreen() {
             <Pressable
               style={[
                 styles.controlButton,
-                flash === "torch" && styles.flashButtonActive,
+                torch && styles.flashButtonActive,
                 !hasFlash && styles.buttonDisabled,
               ]}
               onPress={toggleFlash}
               disabled={!hasFlash}
             >
               <Icon
-                name={flash === "torch" ? "zap" : "zap-off"}
+                name={torch ? "zap" : "zap-off"}
                 size={24}
                 color={hasFlash ? "#fff" : "#999"}
               />
@@ -293,7 +285,7 @@ const styles = StyleSheet.create({
     color: "#333",
     fontWeight: "500",
   },
-  cameraContainer: {
+    cameraContainer: {
     width: "90%",
     aspectRatio: 1,
     borderRadius: 16,
@@ -305,11 +297,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
+  camera: {
+    flex: 1,
+  },
   scanOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 122, 255, 0.3)",
     borderWidth: 3,
-     marginBottom: 20,
     borderColor: "#007AFF",
   },
   zoomTextContainer: {

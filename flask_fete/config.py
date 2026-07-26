@@ -8,9 +8,9 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
     SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY")
 
-    # Resend
-    RESEND_API_KEY = os.getenv("RESEND_API_KEY")
-    RESEND_FROM_EMAIL = os.getenv("RESEND_FROM_EMAIL", "onboarding@resend.dev")
+    # Brevo
+    BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+    MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER")
 
     DEBUG = os.getenv("FLASK_DEBUG", "False") == "True"
 
