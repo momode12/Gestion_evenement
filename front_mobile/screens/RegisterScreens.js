@@ -13,7 +13,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
-import axios from 'axios';
+import axios from "axios";
 import { API_URL } from "@env";
 
 export default function RegisterScreens() {
@@ -37,7 +37,7 @@ export default function RegisterScreens() {
       setPasswordError("Le mot de passe doit contenir au moins 6 caractères");
     } else if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/.test(value)) {
       setPasswordError(
-        "Le mot de passe doit contenir une majuscule, une minuscule et un chiffre"
+        "Le mot de passe doit contenir une majuscule, une minuscule et un chiffre",
       );
     } else {
       setPasswordError("");
@@ -54,51 +54,72 @@ export default function RegisterScreens() {
   };
 
   const handleSubmit = async () => {
-  if (!username || !prenom || !email || !password || !confirmPassword || !role) {
-    Alert.alert("Champs requis", "Veuillez remplir tous les champs");
-    return;
-  }
+    if (
+      !username ||
+      !prenom ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !role
+    ) {
+      Alert.alert("Champs requis", "Veuillez remplir tous les champs");
+      return;
+    }
 
-  if (passwordError || confirmError) {
-    Alert.alert("Erreur de mot de passe", "Veuillez vérifier les mots de passe");
-    return;
-  }
+    if (passwordError || confirmError) {
+      Alert.alert(
+        "Erreur de mot de passe",
+        "Veuillez vérifier les mots de passe",
+      );
+      return;
+    }
 
-  const registrationData = {
-    nom_utilisateur: username,
-    prenom_utilisateur: prenom,
-    email_utilisateur: email,
-    role_utilisateur: role,
-    mot_de_passe_utilisateur: password,
-    statut_utilisateur: "en attente",
+    const registrationData = {
+      nom_utilisateur: username,
+      prenom_utilisateur: prenom,
+      email_utilisateur: email,
+      role_utilisateur: role,
+      mot_de_passe_utilisateur: password,
+      statut_utilisateur: "en attente",
+    };
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/utilisateur`,
+        registrationData,
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        Alert.alert(
+          "✅ Inscription réussie !",
+          "Votre compte a été créé avec succès. Veuillez attendre la validation de votre compte par un administrateur avant de pouvoir vous connecter.",
+          [{ text: "OK", onPress: () => navigation.navigate("Login") }],
+        );
+      } else {
+        Alert.alert(
+          "❌ Erreur",
+          response.data.message || "❌ Erreur lors de l'inscription",
+        );
+      }
+    } catch (error) {
+      console.error("❌ Erreur d'inscription:", error);
+
+      if (error.response) {
+        // Erreur envoyée par le serveur (ex: 400 ou 500)
+        const message = error.response.data.message || "❌ Erreur du serveur";
+        Alert.alert("❌ Erreur", message);
+      } else if (error.request) {
+        // Pas de réponse du serveur
+        Alert.alert(
+          "❌ Erreur",
+          "Aucune réponse du serveur. Vérifiez l'URL ou la connexion.",
+        );
+      } else {
+        // Autre erreur
+        Alert.alert("❌ Erreur", "Une erreur s'est produite.");
+      }
+    }
   };
-
-  try {
-    const response = await axios.post(`${API_URL}/api/utilisateur`, registrationData);
-
-    if (response.status === 200 || response.status === 201) {
-      Alert.alert("✅ Succès", "Inscription réussie !");
-      navigation.navigate("Login");
-    } else {
-      Alert.alert("❌ Erreur", response.data.message || "❌ Erreur lors de l'inscription");
-    }
-  } catch (error) {
-    console.error("❌ Erreur d'inscription:", error);
-
-    if (error.response) {
-      // Erreur envoyée par le serveur (ex: 400 ou 500)
-      const message = error.response.data.message || "❌ Erreur du serveur";
-      Alert.alert("❌ Erreur", message);
-    } else if (error.request) {
-      // Pas de réponse du serveur
-      Alert.alert("❌ Erreur", "Aucune réponse du serveur. Vérifiez l'URL ou la connexion.");
-    } else {
-      // Autre erreur
-      Alert.alert("❌ Erreur", "Une erreur s'est produite.");
-    }
-  }
-};
-
 
   return (
     <KeyboardAvoidingView
@@ -230,12 +251,15 @@ export default function RegisterScreens() {
           <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
 
-          <Text style={styles.registerText}>
-                Déjà un compte ? {' '}
-                <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
-                Se connecter
-                </Text>
-                   </Text>
+        <Text style={styles.registerText}>
+          Déjà un compte ?{" "}
+          <Text
+            style={styles.link}
+            onPress={() => navigation.navigate("Login")}
+          >
+            Se connecter
+          </Text>
+        </Text>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -296,15 +320,15 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
- registerText: {
+  registerText: {
     marginTop: 14,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 14,
-    color: '#333',
+    color: "#333",
   },
   link: {
-    color: '#0066cc',
-    fontWeight: 'bold',
+    color: "#0066cc",
+    fontWeight: "bold",
   },
   errorRow: {
     flexDirection: "row",

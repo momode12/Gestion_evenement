@@ -124,20 +124,19 @@ function Register() {
       const data = await response.json();
 
       if (response.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "Succès",
-          text: "Inscription réussie !",
-          showConfirmButton: false, // Affiche le bouton
-          timer: 2000,   
-        }).then(() => navigate("/login"));
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Erreur",
-          text: data.message || "Erreur lors de l'inscription",
-        });
-      }
+  Swal.fire({
+    icon: "success",
+    title: "Inscription réussie !",
+    text: "Votre compte a été créé avec succès. Veuillez attendre la validation de votre compte par un administrateur avant de pouvoir vous connecter.",
+    confirmButtonText: "OK",
+  }).then(() => navigate("/login"));
+} else {
+  Swal.fire({
+    icon: "error",
+    title: "Erreur",
+    text: data.message || "Erreur lors de l'inscription",
+  });
+}
     } catch (error) {
       console.error("Erreur d'inscription:", error);
       Swal.fire({
