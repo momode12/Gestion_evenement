@@ -6,7 +6,7 @@ import Customers from "./Components/Customers/Customers";
 import User from "./Components/User/User";
 import Entree_Sortie from "./Components/Entree_Sortie/Entree_Sortie";
 import Sidebar from "./Pages/Sidebar";
-import List_client from "./Components/2_date/list_client";
+import List_client from "./Components/2_date/List_client";
 
 function App() {
   return (
