@@ -17,7 +17,14 @@ ensure_database_exists()
 app = Flask(__name__)
 app.config.from_object(Config)
 
-origins = os.getenv("FRONTEND_URL", "").split(",")
+raw_origins = os.getenv("FRONTEND_URL", "")
+origins = [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
+
+if not origins:
+
+    origins = ["*"]
+
+print(f"[CORS] Origines autorisées: {origins}")
 
 CORS(
     app,
