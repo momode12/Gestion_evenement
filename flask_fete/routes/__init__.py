@@ -1,6 +1,6 @@
-from routes.utilisateurs import utilisateur_bp
-from routes.client import client_bp
-from routes.entree_sortie import entree_sortie_bp
+from .utilisateurs import utilisateur_bp
+from .client import client_bp
+from .entree_sortie import entree_sortie_bp
 
 
 def create_routes(app):
