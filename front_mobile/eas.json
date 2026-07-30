@@ -3,13 +3,14 @@
     "development": {
       "developmentClient": true
     },
-
     "preview": {
       "distribution": "internal"
     },
-
     "production": {
       "autoIncrement": true
     }
+  },
+  "cli": {
+    "appVersionSource": "remote"
   }
 }
