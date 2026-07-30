@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from services.utilisateur_service import creer_utilisateur
+from ...utilisateur_service import creer_utilisateur
 
 
 def create_utilisateur():
