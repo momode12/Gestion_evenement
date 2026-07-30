@@ -1,6 +1,6 @@
 from ..models import db
-from models.entree_sortie_model import EntreeSortie
-from models.utilisateur_model import Utilisateur
+from ..models.entree_sortie_model import EntreeSortie
+from ..models.utilisateur_model import Utilisateur
 
 
 def autoriser_entree(id_utilisateur, cin_client):
