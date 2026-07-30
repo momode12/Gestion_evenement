@@ -6,7 +6,7 @@ load_dotenv()
 
 from flask import Flask
 from flask_cors import CORS
-from config import Config
+from .config import Config
 from database import ensure_database_exists
 from models import db
 from routes import create_routes
