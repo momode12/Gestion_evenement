@@ -1,5 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db
+from ..models import db
 from models.utilisateur_model import Utilisateur
 from services.email_service import envoyer_email_admin, envoyer_email_utilisateur
 
