@@ -6,10 +6,10 @@ load_dotenv()
 
 from flask import Flask
 from flask_cors import CORS
-from .config import Config
-from .database import ensure_database_exists
-from .models import db
-from .routes import create_routes
+from config import Config
+from database import ensure_database_exists
+from models import db
+from routes import create_routes
 
 # 1. Créer la base de données automatiquement si elle n'existe pas
 ensure_database_exists()
