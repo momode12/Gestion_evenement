@@ -1,8 +1,8 @@
 from datetime import datetime
-from ..models import db, Client
-from ..models.entree_sortie_model import EntreeSortie
-from ..services.qrcode_service import generer_qrcode_avec_photo, construire_texte_qr
-from ..services.email_service import envoyer_email_client_creation, envoyer_email_client_update
+from models import db, Client
+from models.entree_sortie_model import EntreeSortie
+from services.qrcode_service import generer_qrcode_avec_photo, construire_texte_qr
+from services.email_service import envoyer_email_client_creation, envoyer_email_client_update
 
 
 def creer_client(data, photo_bytes):
