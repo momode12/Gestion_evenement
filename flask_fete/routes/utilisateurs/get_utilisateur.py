@@ -1,5 +1,5 @@
 from flask import jsonify
-from services.utilisateur_service import lister_utilisateurs
+from ...services.utilisateur_service import lister_utilisateurs
 
 
 def get_utilisateurs():
