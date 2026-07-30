@@ -1,4 +1,4 @@
-from models import db
+from ..models import db
 from models.entree_sortie_model import EntreeSortie
 from models.utilisateur_model import Utilisateur
 
