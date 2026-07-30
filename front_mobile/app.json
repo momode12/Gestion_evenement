@@ -28,6 +28,12 @@
     },
     "plugins": [
       "expo-status-bar"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "90e986d1-3b77-4f5f-ace4-e8707b08c64c"
+      }
+    },
+    "owner": "julien586s-team"
   }
 }
