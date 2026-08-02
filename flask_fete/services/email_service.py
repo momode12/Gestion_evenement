@@ -64,7 +64,13 @@ def envoyer_email_client_update(email, qr_code_bytes):
     _envoyer(email, "Votre Code QR mis à jour", corps, qr_code_bytes)
 
 
-def envoyer_email_admin(utilisateur):
+def envoyer_email_admin(utilisateur, nombre_en_attente=None):
+    WEB_URL = "https://fete-be.vercel.app/"
+
+    info_attente = ""
+    if nombre_en_attente is not None and nombre_en_attente > 1:
+        info_attente = f"\n⚠️ Il y a actuellement {nombre_en_attente} comptes en attente de validation.\n"
+
     corps = f"""
 Un nouvel utilisateur a demandé une inscription.
 
@@ -72,19 +78,37 @@ Nom : {utilisateur.nom_utilisateur}
 Prénom : {utilisateur.prenom_utilisateur}
 Email : {utilisateur.email_utilisateur}
 Rôle : {utilisateur.role_utilisateur}
-
-Merci de valider ou refuser cette inscription via l'interface d'administration.
+{info_attente}
+Merci de valider ou refuser cette inscription via l'interface d'administration :
+{WEB_URL}
 """
     _envoyer("heritianajulien12@gmail.com", "Nouvelle demande d'inscription", corps)
 
 
 def envoyer_email_utilisateur(utilisateur, statut):
+    WEB_URL = "https://fete-be.vercel.app/"
+    APK_URL = "https://expo.dev/accounts/julien586s-team/projects/gestion-evenement/builds/afe91842-228f-4b91-8826-da7a9c38d5e8"  # à remplacer par un lien plus stable si possible
+
     if statut == 'Accepté':
-        corps = f"""
+        if utilisateur.role_utilisateur in ('admin', 'responsable'):
+            corps = f"""
 Bonjour {utilisateur.prenom_utilisateur},
 
 Votre inscription a été acceptée ! 🎉
-Vous pouvez maintenant vous connecter à la plateforme.
+Vous pouvez maintenant vous connecter à la plateforme via le lien suivant :
+
+{WEB_URL}
+
+Merci et bienvenue !
+"""
+        else:  # securite_entree, securite_sortie
+            corps = f"""
+Bonjour {utilisateur.prenom_utilisateur},
+
+Votre inscription a été acceptée ! 🎉
+Pour votre rôle, la connexion se fait via l'application mobile. Téléchargez-la ici :
+
+{APK_URL}
 
 Merci et bienvenue !
 """

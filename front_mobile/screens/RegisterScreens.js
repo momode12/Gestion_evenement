@@ -139,6 +139,7 @@ export default function RegisterScreens() {
           <TextInput
             style={styles.input}
             placeholder="Nom d'utilisateur"
+            placeholderTextColor="#999"
             value={username}
             onChangeText={setUsername}
           />
@@ -155,6 +156,7 @@ export default function RegisterScreens() {
           <TextInput
             style={styles.input}
             placeholder="Prénom"
+            placeholderTextColor="#999"
             value={prenom}
             onChangeText={setPrenom}
           />
@@ -166,6 +168,7 @@ export default function RegisterScreens() {
           <TextInput
             style={styles.input}
             placeholder="Email"
+            placeholderTextColor="#999"
             keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
@@ -176,12 +179,20 @@ export default function RegisterScreens() {
           <Picker
             selectedValue={role}
             onValueChange={(itemValue) => setRole(itemValue)}
+            style={styles.picker}
+            dropdownIconColor="#333"
           >
-            <Picker.Item label="Sélectionner un rôle" value="" />
-            <Picker.Item label="Admin" value="admin" />
-            <Picker.Item label="Responsable" value="responsable" />
-            <Picker.Item label="Sécurité Entrée" value="securite_entree" />
-            <Picker.Item label="Sécurité Sortie" value="securite_sortie" />
+            <Picker.Item label="Sélectionner un rôle" value="" color="#000" />
+            <Picker.Item
+              label="Sécurité Entrée"
+              value="securite_entree"
+              color="#000"
+            />
+            <Picker.Item
+              label="Sécurité Sortie"
+              value="securite_sortie"
+              color="#000"
+            />
           </Picker>
         </View>
 
@@ -191,6 +202,7 @@ export default function RegisterScreens() {
           <TextInput
             style={styles.input}
             placeholder="Mot de passe"
+            placeholderTextColor="#999"
             secureTextEntry={!showPassword}
             value={password}
             onChangeText={handlePasswordChange}
@@ -224,6 +236,7 @@ export default function RegisterScreens() {
           <TextInput
             style={styles.input}
             placeholder="Confirmer le mot de passe"
+            placeholderTextColor="#999"
             secureTextEntry={!showConfirmPassword}
             value={confirmPassword}
             onChangeText={handleConfirmPasswordChange}
@@ -301,6 +314,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 4,
     marginTop: 10,
+  },
+  picker: {
+    color: "#000",
   },
   pickerContainer: {
     borderWidth: 1,

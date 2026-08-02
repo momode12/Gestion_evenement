@@ -85,6 +85,7 @@ export default function LoginScreens() {
         style={styles.input}
         placeholder="Email"
         value={email}
+        placeholderTextColor="#999"
         autoCapitalize="none"
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -97,6 +98,7 @@ export default function LoginScreens() {
             passwordError && styles.inputError,
             styles.passwordInput,
           ]}
+          placeholderTextColor="#999"
           placeholder="Mot de passe"
           secureTextEntry={!showPassword}
           value={password}
